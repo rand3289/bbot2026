@@ -44,22 +44,108 @@ module bblock(){
         union(){
             c(8,25);
             t(0,0,8) c(8,12);
+            t(0,25,0) b(16,50,8);
         }
         t(0,0,-0.51) c(7,22);
-        c(30,9);
+//        c(30,9);
     }
 }
 
 module centerBlock(){
     difference(){
         union(){
-            t(0,-16,0) b(16,32,16);
             c(16, 25);
+            t(0,-25,0) b(16,50,16);
         }
         c(18, 22);
+        t(0,-30, 5) b(8,30,8);
+        t(0,-30,-5) b(8,30,8);
     }
 }
 
+module arm(){
+    difference(){
+        union(){
+            t(0,-25,0) b(16,50,8);
+            c(8,16);
+        }
+        c(12,12);
+    }
+}
+
+module spindle(){
+    difference(){
+        union(){
+            c(8, 25);
+            t(0,0,4) cylinder(7,12.5,5);
+        }
+        b(shaft_square,shaft_square,30);
+        t(0,0,-0.6) c(7.1,22);
+    }
+}
+
+module bblock2(){
+    difference(){
+        union(){
+            c(10,25);
+            t(0,25,0) b(16,50,10);
+        }
+        c(7,7);
+        t(0,0,-1.51) c(7,22);
+        c(20,3); // screw hole
+    }
+}
+
+module bblock3(){
+    difference(){
+        union(){
+            c(24,25);
+            t(0,25,0) b(16,50,8);
+        }
+        c(22,22); // bearing hole
+        t(0,0,10) c(10,9);  // shaft hole
+        t(12,0,0) b(10,20,30); // slice
+    }
+}
+
+
+module bblock4(){
+    difference(){
+        union(){
+            t(0,0,-4) c(16,10); 
+            c(9,25);
+            t(0,15,0) b(16,70,10);
+        }
+        c(7,22); // bearing hole
+        t(0,0,2) c(10,9);  // shaft hole
+        t(0,-15,0) r(0,90,0) c(50,3);
+        t(0,15,0)  r(0,90,0) c(50,3);
+    }
+}
+
+
+module arm3(){
+    color("green")
+    difference(){
+        union(){
+            c(8,28);
+            t(0,-25,0) b(16,50,8);
+        }
+        c(10,25);
+    }
+}
+
+
+// testing:
+t(0,0,70) spindle();
+t(0,0,-70) bblock2(); 
+t(0,0,-110) bblock3(); 
+t(0,0,-101.99) arm3();
+t(0,0,-150) bblock4(); 
+
+
+color("red") t(0,0,43.1)  arm();
+color("red") t(0,0,-43.1) arm();
 
 t(0,0,3.6)   bearing();
 t(0,0,-3.6)  bearing();
@@ -75,5 +161,5 @@ t(0,0, 29) brakeDisk();
 t(0,0,-29) brakeDisk();
 
 t(0,0,35 ) bblock();
-t(0,0,-35) r(180,0,0) bblock();
+t(0,0,-35) r(180,0,180) bblock();
 centerBlock();
