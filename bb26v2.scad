@@ -7,6 +7,7 @@
 // Outer diameter of the 608 bearing is 22mm.  ID 8mm
 // Outer diameter of the 1/2" pvc pipe is 21.5mm
 // TODO: put a screw in the shaft through the sleeve within the bearing block?
+// TODO: build a version with bushings instead of bearings?
 
 use <bcstr.scad> // b(),c(),s(),t(),r()
 include <BOSL2/std.scad>
@@ -14,7 +15,7 @@ include <BOSL2/gears.scad>
 $fn=128;          // make cylinders a bit rounder
 skipdraw = false; // disable rendering the main view for debugging
 shaft_round = 8;  // 608 bearings fit an 8mm round shaft
-// if you grind the end of an 8mm round shaft into a square, it will be this size
+// if you grind the end of shaft_round into a square, it will be this size
 shaft_square = sqrt(shaft_round*shaft_round/2);
 echo("Shaft end square size", shaft_square);
 
@@ -101,8 +102,15 @@ module hingeSide(){
         r(0,90,0) c(10,26);          // hinge hole
         t(0,53,0) r(0,90,0) c(10,3); // screw hole
         t(0,40,0) r(0,90,0) c(10,3); // screw hole
+//        if(!$preview){ // groove to clear screw heads
+            for(i = [0:6:366] ){
+                r(i,0,0) t(5,15,0) c(2,3);
+            }
+//        }
     }
 }
+//skipdraw = true;
+//hingeSide();
 
 module hingeAssembly(){ // for visualization only
     color("yellow") t(34,0,0)  r(180,180,0) hingeSide();
@@ -229,8 +237,8 @@ if($preview){
     t(200,-40,0) sleve();
 
     frame();
-    t(-90,-30,0) r(0,90,0) hingeSide();
-    t(90,-30,0)  r(0,90,0) hingeSide(); // need two per joint
+    t(-90,-30,0) r(0,-90,0) hingeSide();
+    t(90,-30,0)  r(0,-90,0) hingeSide(); // need two per joint
     t(0,-50,0)  hingeBridge();
     t(80,70,0)  dgear();
     t(0,90,0)   dgear();
