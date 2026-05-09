@@ -144,9 +144,9 @@ module legCap(){ // attaches pipe to lower joint
 
 module stiffBar(){
     difference(){
-        b(68,8,8);
-        t(29,0,0)  r(90,0,0) c(20,3); // side screw hole
-        t(-29,0,0) r(90,0,0) c(20,3); // side screw hole
+        b(92,8,8);
+        t(41,0,0)  r(90,0,0) c(20,3); // side screw hole
+        t(-41,0,0) r(90,0,0) c(20,3); // side screw hole
                    r(90,0,0) c(20,3); // center screw hole
     }
 }
@@ -157,11 +157,11 @@ module dgear(){
     gteeth = 12; 
     difference(){
         union(){
-            bevel_gear(teeth=gteeth, mate_teeth=gteeth, mod=4, cutter_radius=0, spiral=0, shaft_diam=8);
+            bevel_gear(teeth=gteeth, mate_teeth=gteeth, mod=4, cutter_radius=0, spiral=0, shaft_diam=3);
             t(0,0,5) cylinder(6,10,5);
         }
-        t(0,0,6) c(20,8); // shaft hole
-//        b(shaft_hole,shaft_hole,20);
+        t(0,0,0.33) c(9,8.3); // round shaft hole
+        t(0,0,8.8) b(shaft_square,shaft_square,8); // square on top
         for(i = [0:360/gteeth:360] ){
             r(0,0,i) t(15,0,0) c(20,2); // mounting holes
         }
@@ -187,14 +187,14 @@ module foot(){ // implicit union
     }
 }
 
-module axle1(len){
-    t(0,0,17/2) b(shaft_square,shaft_square,17); // 1 gear mount
-    t(0,0,-16) c(32,shaft_round);                // bearings mount here
+module axle1(len=47){
+    b(shaft_square,shaft_square,len); // top 5mm of gear hole is square
+    t(0,0,-3) c(len-6,shaft_round); // bearings mount here
 }
 
 module axle2(len){
     b(shaft_square,shaft_square,len); // 2 gear mounts
-    c(len-14,shaft_round);            // bearings mount here
+    c(len-10,shaft_round);            // bearings mount here
 }
 
 // spacer between two bearings around axle1() to lock bearings in place
@@ -206,12 +206,12 @@ module sleve(len=14.1){
 if(!skipdraw){ // set skipdraw=true for quick debugging of individual parts
 if($preview){
     color("red")  t(0,-97,0)    r(90,0,0) axle2(174);
-    color("red")  t(-45,-195,0) r(0,90,0) axle1(); // 2 per joint
-    color("teal") t(-60,-195,0) r(0,90,0) sleve(); // spacer between bearings
+    color("red")  t(-36.9,-195,0) r(0,90,0) axle1(); // 2 per joint
+    color("teal") t(-50,-195,0) r(0,90,0) sleve(); // spacer between bearings
 
-    t(240,0,0) r(-90,90,0) frame(); // the other leg
-    t(120,0,0) r(90,90,0) frame();
-    t(120,0,0) r(90,90,0) hingeAssembly();
+    t(270,0,0) r(-90,90,0) frame(); // the other leg
+    t(150,0,0) r(90,90,0) frame();
+    t(150,0,0) r(90,90,0) hingeAssembly();
     frame();
     hingeAssembly();
     t(0,-195,0) r(0,0,180) frame();
@@ -228,7 +228,7 @@ if($preview){
 
 %   t(0,-360,0)   r(90,0,0) c(200,21.5); // pvc pipe
 %   t(0,-98,0)    r(90,0,0) c(120,21.5); // pvc pipe
-%   t(60,0,0)     r(0,90,0) c(50,21.5);  // pvc pipe
+%   t(80,0,0)     r(0,90,0) c(50,21.5);  // pvc pipe
 %   t(28.3,-195,0)  r(0,90,0) c(1.5,95);   // brake disk
 %   t(-28.3,-195,0) r(0,90,0) c(1.5,95);   // brake disk
 

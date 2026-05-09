@@ -29,10 +29,11 @@ module dgear(){
     gteeth = 12; 
     difference(){
         union(){
-            bevel_gear(teeth=gteeth, mate_teeth=gteeth, mod=4, cutter_radius=0, spiral=0, shaft_diam=8);
+            bevel_gear(teeth=gteeth, mate_teeth=gteeth, mod=4, cutter_radius=0, spiral=0, shaft_diam=3);
             t(0,0,5) cylinder(6,10,5);
         }
-        t(0,0,6) c(20,8); // shaft hole
+        t(0,0,0.33) c(9,8.3); // shaft hole
+        t(0,0,8.8) b(shaft_square,shaft_square,8);
         for(i = [0:360/gteeth:360] ){
             r(0,0,i) t(15,0,0) c(20,2); // mounting holes
         }
@@ -158,6 +159,7 @@ module gearSizer(){
     }
 }
 
+
 color("white") t(0,0,20) gearSizer();
 
 // testing:
@@ -188,3 +190,11 @@ t(0,0,-29) brakeDisk();
 t(0,0,35 ) bblock();
 t(0,0,-35) r(180,0,180) bblock();
 centerBlock();
+
+
+// slicing a gear to see where round shaft becomes square shaft
+difference(){
+    t(0,0,100) dgear();
+    t(0,0,115.7) b(50,50,20); 
+%    t(0,0,121) b(50,50,20); 
+}
