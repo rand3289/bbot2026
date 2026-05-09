@@ -1,4 +1,4 @@
-// BrakerBot2025 toandrey(at)yahoo.com
+// BrakerBot2026 toandrey(at)yahoo.com
 // Brakes actuated by servo motors (not shown) transfer torque from disks to limbs
 // Print everything with 0.3mm layers without support
 // Uses 1/2" pvc pipe, 608 bearings, 95mm disks from Hard Drives, HS300 servos
@@ -6,6 +6,7 @@
 //
 // Outer diameter of the 608 bearing is 22mm.  ID 8mm
 // Outer diameter of the 1/2" pvc pipe is 21.5mm
+// TODO: put a screw in the shaft through the sleeve within the bearing block?
 
 use <bcstr.scad> // b(),c(),s(),t(),r()
 include <BOSL2/std.scad>
@@ -24,9 +25,8 @@ module flatten(top=8){ // remove everything below top
     }
 }
 
-// put a screw in the shaft through the sleeve within the bearing block
-// or put a round cap on it
-module cutout(){ // cutout on a side of a bearing block
+// create holes on a side of a bearing block so it can be cut out for attaching a pipe
+module cutout(){
     difference(){
         c(5,22);
         union(){
@@ -115,7 +115,7 @@ module legCap(){ // attaches pipe to lower joint
     difference(){
         union(){
             b(32,8,16);
-            b(66,8,8);
+            b(92,8,8);
             t(0,6,0) r(90,0,0) c(20,25);
         }
         t(0,9,0)   r(90,0,0)   c(20,22); // pvc pipe hole
@@ -123,25 +123,12 @@ module legCap(){ // attaches pipe to lower joint
         r(0,120,0) t(0,10,10)  c(20,3);  // pipe screw hole
         r(0,60,0)  t(0,10,-10) c(20,3);  // pipe screw hole
                    r(90,0,0)   c(20,3);  // center screw hole
-        t(29,0,0)  r(90,0,0) c(20,3);    // side screw hole
-        t(-29,0,0) r(90,0,0) c(20,3);    // side screw hole
+        t(41,0,0)  r(90,0,0) c(20,3);    // side screw hole
+        t(-41,0,0) r(90,0,0) c(20,3);    // side screw hole
     }
 }
 
-//module cap(){ // side cap for the lower joint
-//    difference(){
-//        c(16, 28);                      // cap body
-//        t(0,0,1.5)   c(16,22.2);        // bearing hole (.2 tolerance)
-//        t(0,0,8.5)   c(16,25);          // slides over bearing block
-//        t(0,-12,5)   b(8.2,6,7);        // side cutout
-//        t(-10,0,4.5) r(0,90,0)   c(30,3); // top screw hole
-//        r(90,0,30)   t(0,4.5,5)  c(20,3); // screw hole
-//        r(90,0,-30)  t(0,4.5,-5) c(20,3); // screw hole
-//        t(5,0,0)     c(20,3);           // bottom holes to help
-//        t(-5,0,0)    c(20,3);           // take out bearing
-//    }
-//}
-
+// enforces the hip frame instead of a legCap()
 module stiffBar(){
     difference(){
         b(92,8,8);
@@ -170,7 +157,7 @@ module dgear(){
 
 // Foot that fits into a 1/2" PVC pipe
 module foot(){ // implicit union
-    intersection(){ // bottom of the foot (hat)
+    intersection(){ // bottom of the foot (mushroom cap)
         t(0,0,12) c(10,21.5);
         t(0,0,-4) sphere(18);
     }
@@ -189,12 +176,12 @@ module foot(){ // implicit union
 
 module axle1(len=47){
     b(shaft_square,shaft_square,len); // top 5mm of gear hole is square
-    t(0,0,-3) c(len-6,shaft_round); // bearings mount here
+    t(0,0,-3) c(len-6,shaft_round);   // bearings mount here
 }
 
 module axle2(len){
     b(shaft_square,shaft_square,len); // 2 gear mounts
-    c(len-10,shaft_round);            // bearings mount here
+    c(len-12,shaft_round);            // bearings mount here
 }
 
 // spacer between two bearings around axle1() to lock bearings in place
@@ -205,9 +192,9 @@ module sleve(len=14.1){
 
 if(!skipdraw){ // set skipdraw=true for quick debugging of individual parts
 if($preview){
-    color("red")  t(0,-97,0)    r(90,0,0) axle2(174);
+    color("red")  t(0,-97,0)    r(90,0,0) axle2(170.1);
     color("red")  t(-36.9,-195,0) r(0,90,0) axle1(); // 2 per joint
-    color("teal") t(-50,-195,0) r(0,90,0) sleve(); // spacer between bearings
+    color("teal") t(-50,-195,0) r(0,90,0) sleve();   // spacer between bearings
 
     t(270,0,0) r(-90,90,0) frame(); // the other leg
     t(150,0,0) r(90,90,0) frame();
@@ -217,8 +204,6 @@ if($preview){
     t(0,-195,0) r(0,0,180) frame();
     t(0,-195,0) r(0,0,180) hingeAssembly();
 
-//  t(33.5,0,0)
-//    t(-80,-195,0) r(0,90,0)    cap();
     t(0,-260,0)   r(180,180,0) legCap();
     t(0,70,0)     stiffBar();
 
@@ -229,8 +214,8 @@ if($preview){
 %   t(0,-360,0)   r(90,0,0) c(200,21.5); // pvc pipe
 %   t(0,-98,0)    r(90,0,0) c(120,21.5); // pvc pipe
 %   t(80,0,0)     r(0,90,0) c(50,21.5);  // pvc pipe
-%   t(28.3,-195,0)  r(0,90,0) c(1.5,95);   // brake disk
-%   t(-28.3,-195,0) r(0,90,0) c(1.5,95);   // brake disk
+%   t(28.3,-195,0)  r(0,90,0) c(1.5,95); // brake disk
+%   t(-28.3,-195,0) r(0,90,0) c(1.5,95); // brake disk
 
     t(0,-480,0) r(90,0,0) foot();
 } else { // rendering for 3D printing
@@ -239,8 +224,7 @@ if($preview){
     t(-70,45,0)  r(90,45,0) axle1(); // need 2 per joint
     t(-70,90,0)  sleve();            // need 2 per joint
     t(-50,90,0)  sleve();
-    sleve(7.5); // shaft spacer between gear and bearing
-//    t(110,80,0)  cap();
+
     t(110,80,0) foot();
     t(110,20,0)  r(90,0,-90) legCap();
 
