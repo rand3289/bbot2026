@@ -219,23 +219,22 @@ if($preview){
 
     t(0,-480,0) r(90,0,0) foot();
 } else { // rendering for 3D printing
-    // axle2(len);  // len depends on PVC pipe length
-    t(-50,45,0)  r(90,45,0) axle1(); // fixed length for each joint
-    t(-70,45,0)  r(90,45,0) axle1(); // need 2 per joint
-    t(-70,90,0)  sleve();            // need 2 per joint
-    t(-50,90,0)  sleve();
-
-    t(110,80,0) foot();
-    t(110,20,0)  r(90,0,-90) legCap();
+    t(205,0,0) foot();
+    t(290,0,0) r(90,0,90)  stiffBar();
+    t(260,0,0) r(90,0,-90) legCap();
+    t(310,0,0) r(90,0,0) axle2(170);  // len depends on PVC pipe length
+    t(230,40,0)  r(90,45,180) axle1(); // fixed length for each joint
+    t(230,-40,0) r(90,45,0)   axle1(); // need 2 per joint
+    t(200,40,0)  sleve();              // need 2 per joint
+    t(200,-40,0) sleve();
 
     frame();
-    t(-70,-20,0) r(90,0,90)  stiffBar();
-    t(70,40,0)   r(180,90,0) hingeSide();
-    t(110,-40,0) r(0,90,90)  hingeSide(); // need two per joint
-    t(10,-50,0)  hingeBridge();
+    t(-90,-30,0) r(0,90,0) hingeSide();
+    t(90,-30,0)  r(0,90,0) hingeSide(); // need two per joint
+    t(0,-50,0)  hingeBridge();
+    t(80,70,0)  dgear();
+    t(0,90,0)   dgear();
+    t(-80,70,0) dgear();
 
-    t(70,80,0)   dgear();
-    t(30,80,0)   dgear();
-    t(-10,80,0)  dgear();
 } // if($preview)
 } // skipdraw
