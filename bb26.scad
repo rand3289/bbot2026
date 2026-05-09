@@ -123,6 +123,20 @@ module bblock4(){
     }
 }
 
+module bblock4_h1(){
+    difference(){
+        bblock4();
+        t(15,0,0) b(30, 110,30);
+    }
+}
+
+module bblock4_h2(){
+    difference(){
+        bblock4();
+        t(-15,0,0) b(30, 110,30);
+    }
+}
+
 
 module arm3(){
     color("green")
@@ -135,13 +149,24 @@ module arm3(){
     }
 }
 
+module gearSizer(){
+    difference(){
+        d=53.6;
+        h=5;
+        c(h,d);
+        c(h+1,d-0.001);
+    }
+}
+
+color("white") t(0,0,20) gearSizer();
 
 // testing:
 t(0,0,70) spindle();
 t(0,0,-70) bblock2(); 
 t(0,0,-110) bblock3(); 
 t(0,0,-101.99) arm3();
-t(0,0,-150) bblock4(); 
+t(-10,0,-150) bblock4_h1(); 
+t(10,0,-150) bblock4_h2(); 
 
 
 color("red") t(0,0,43.1)  arm();
