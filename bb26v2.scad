@@ -1,7 +1,7 @@
 // BrakerBot2026 toandrey(at)yahoo.com
 // Brakes actuated by servo motors (not shown) transfer torque from disks to limbs
 // Print everything with 0.3mm layers without support
-// Uses 1/2" pvc pipe, 608 bearings, 95mm disks from Hard Drives, HS300 servos
+// Uses 1/2" pvc pipe, 608 bearings, 95mm disks from Hard Drives, MG996R servos
 // Every joint uses four or five bearings (not shown), 2 disks and 3 gears
 //
 // Outer diameter of the 608 bearing is 22mm.  ID 8mm
@@ -163,6 +163,22 @@ module dgear(){
     }
 }
 
+module gearDrillTemplate(){
+    gteeth = 12;
+    id=24.9;
+    h=1.5; // height for HDD shaft
+    difference(){
+        union(){
+            c(10,35); // main cylinder for mounting holes
+            t(0,0,h/2) c(10+h,id); // shaft for an HDD platter
+        }
+        c(20,8); // center hole (5/16"=7.825mm)
+        for(i = [0:360/gteeth:360] ){
+            r(0,0,i) t(15,0,0) c(20,2); // mounting holes
+        }
+    }    
+}
+
 // Foot that fits into a 1/2" PVC pipe
 module foot(){ // implicit union
     intersection(){ // bottom of the foot (mushroom cap)
@@ -227,14 +243,16 @@ if($preview){
 
     t(0,-480,0) r(90,0,0) foot();
 } else { // rendering for 3D printing
+    t(275,60,0) gearDrillTemplate();
     t(205,0,0) foot();
-    t(290,0,0) r(90,0,90)  stiffBar();
-    t(260,0,0) r(90,0,-90) legCap();
+    t(290,-30,0) r(90,0,90)  stiffBar();
+    t(260,-30,0) r(90,0,-90) legCap();
     t(310,0,0) r(90,0,0) axle2(170);  // len depends on PVC pipe length
     t(230,40,0)  r(90,45,180) axle1(); // fixed length for each joint
     t(230,-40,0) r(90,45,0)   axle1(); // need 2 per joint
     t(200,40,0)  sleve();              // need 2 per joint
     t(200,-40,0) sleve();
+
 
     frame();
     t(-90,-30,0) r(0,-90,0) hingeSide();
