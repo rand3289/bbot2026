@@ -1,4 +1,4 @@
-// bcstr.scad generic helper modules (2025-04-27)
+// bcstr.scad generic helper modules (2026-05-12)
 // comments after modules show up in vscode tooltips
 module b(x,y,z){           cube([x,y,z],center=true); }     // block (cube)
 module c(hi,od){ $fn=16*sqrt(od); cylinder(h=hi, d=od, center=true); } // cylinder
@@ -67,5 +67,33 @@ t(100,150,0) c(20,25);
 intersection(){ // capped pipe demo
     t(-100,0,0) pipe(50,20,10,1);
     t(-90,0,0) b(22,22,60); // slice the pipe to show caps
+}
+
+
+
+module d(){ // alternative to difference()
+    difference(){
+        children(0); 
+        for(i=[1:$children-1]) children(i);
+    }
+}
+module i(){ // alternative to intersection()
+    intersection(){
+        children(0); 
+        for(i=[1:$children-1]) children(i);
+    }
+}
+module u(){ children(); } // alternative to union()
+
+// testing d() i() u()
+t(0,0,100) i(){
+    t(0,5,0) b(10,10,30);
+    d(){
+        u(){
+            b(10,12,15);
+            t(0,0,10) s(10);
+        }
+        c(30, 5);
+    }
 }
 
