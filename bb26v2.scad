@@ -18,6 +18,8 @@ shaft_round = 8;  // 608 bearings fit an 8mm round shaft
 // if you grind the end of shaft_round into a square, it will be this size
 shaft_square = sqrt(shaft_round*shaft_round/2);
 echo("Shaft end square size", shaft_square);
+WIDTH=92;
+W=WIDTH/2;
 
 module flatten(top=8){ // remove everything below top
     intersection(){
@@ -42,53 +44,52 @@ module cutout(){
 module frame(){
     difference(){
         union(){
-            difference(){
-                t(0,28.5,0) b(92,57,16); // c-frame
+            difference(){ // c-frame
+                t(0,28.5,0) b(WIDTH,57,16);
                 b(76,98,17);
             }
-            flatten() t(46,0,0) r(0,90,0) c(32,25);  // bearing block
-            flatten() t(-46,0,0) r(0,90,0) c(32,25); // bearing block
-            t(42,30,0)  r(0,0,20)  b(8,45,8);        // ribs to make frame more rigid
-            t(-42,30,0) r(0,0,-20) b(8,45,8);
+            flatten() t(W,0,0)  r(0,90,0) c(32,25); // bearing block
+            flatten() t(-W,0,0) r(0,90,0) c(32,25); // bearing block
+            t(W-4,30,0) r(0,0,20) b(8,45,8);        // ribs to make frame more rigid
+            t(-(W-4),30,0) r(0,0,-20) b(8,45,8);
         }
-        t(46,0,0)    r(0,90,0) c(29,22);  // pipe and bearing hole
-        t(-46,0,0)   r(0,90,0) c(29,22);  // bearing hole
-                     r(0,90,0) c(90,11);  // shaft hole
-        t(0,50,0)    r(90,0,0) c(20,3);   // bracket screw hole center
-        t(41,45,0)   r(90,0,0) c(30,3);   // bracket screw hole side
-        t(-41,45,0)  r(90,0,0) c(30,3);   // bracket screw hole side
-                     t(42,0,13.3)c(4,3);  // vertical screw hole in bearing block
-        r(-70,0,0)   t(49,0,-10) c(20,3); // screw hole in bearing block
-        r(90,0,0)    t(56,0,-10) c(20,3); // screw hole in bearing block
-        t(46,52,0)   r(0,90,0) c(25,3);   // screw holes for bolting
-        t(-46,52,0)  r(0,90,0) c(25,3);   // two frames together
-        t(62,0,0)    r(0,90,0) cutout();  // on side of a bearing block
+        t(W,0,0)      r(0,90,0) c(29,22);  // pipe and bearing hole
+        t(-W,0,0) r(0,90,0) c(29,22);  // bearing hole
+                      r(0,90,0) c(100,11); // shaft hole
+        t(0,50,0)     r(90,0,0) c(20,3);   // bracket screw hole center
+        t(W-5,45,0)    r(90,0,0) c(30,3);  // bracket screw hole side
+        t(-(W-5),45,0) r(90,0,0) c(30,3);  // bracket screw hole side
+                     t(W-4,0,13.3)c(4,3);  // vertical screw hole in bearing block
+        r(-70,0,0)   t(W+3,0,-10) c(20,3); // screw hole in bearing block
+        r(90,0,0)    t(W+10,0,-10)c(20,3); // screw hole in bearing block
+        t(46,52,0)   r(0,90,0)    c(25,3); // screw holes for bolting
+        t(-46,52,0)  r(0,90,0)    c(25,3); // two frames together
+        t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
     }
 }
-
 
 module hingeBridge(){
     difference(){
         union(){
-            b(92,8,16); // beam
+            b(WIDTH,8,16); // beam
             flatten()   t(0,9,0) r(90,0,0) c(30,25); // bearing block
             t(0,9,-4)  b(25,30,8); // makes bearing block bottom square
-            t(0,0,10)   b(92,4,5);  // top bar for rigidity
+            t(0,0,10)   b(WIDTH,4,5);  // top bar for rigidity
 
-            t(42,4,0)   b(8,16,16); // wing 1
-            t(42,12,0)  r(45,0,0) b(8,11.3,11.3);
+            t(W-4,4,0)   b(8,16,16); // wing 1
+            t(W-4,12,0)  r(45,0,0) b(8,11.3,11.3);
 
-            t(-42,4,0)  b(8,16,16); // wing 2
-            t(-42,12,0) r(45,0,0) b(8,11.3,11.3);
+            t(-(W-4),4,0)  b(8,16,16); // wing 2
+            t(-(W-4),12,0) r(45,0,0) b(8,11.3,11.3);
         }
-        t(0,7.5,0)   r(90,0,0) c(30,22); // pipe and bearing hole
-        r(90,0,0)     c(100,11);          // shaft hole
-        t(0,12,13.3)  c(4,3);             // screw hole in bearing block. 13.3 for "print support"
-        t(33.95,0,0)  b(8.1,8.1,8.1);     // cube hole for hinges
-        t(-33.95,0,0) b(8.1,8.1,8.1);     // cube hole for hinges
-        r(0,90,0)     c(95,3);            // 2 screw holes
-        t(40,13,0)    r(0,90,0) c(20,3.6);  // screw hole in wing
-        t(-40,13,0)   r(0,90,0) c(20,3.6);  // screw hole in wing
+        t(0,7.5,0)       r(90,0,0) c(30,22); // pipe and bearing hole
+        r(90,0,0)        c(100,11);          // shaft hole
+        t(0,12,13.3)     c(4,3);             // screw hole in bearing block. 13.3 for "print support"
+        t(W-12,0,0)    b(8.1,8.1,8.1);     // cube hole for hinges
+        t(-(W-12),0,0) b(8.1,8.1,8.1);     // cube hole for hinges
+        r(0,90,0)     c(120,3);            // 2 screw holes
+        t(40,13,0)    r(0,90,0) c(50,3.6); // screw hole in wing
+        t(-40,13,0)   r(0,90,0) c(50,3.6); // screw hole in wing
     }
 }
 
@@ -102,15 +103,8 @@ module hingeSide(){
         r(0,90,0) c(10,26);          // hinge hole
         t(0,53,0) r(0,90,0) c(10,3); // screw hole
         t(0,40,0) r(0,90,0) c(10,3); // screw hole
-//        if(!$preview){ // groove to clear screw heads
-            for(i = [0:6:366] ){
-                r(i,0,0) t(5,15,0) c(2,3);
-            }
-//        }
     }
 }
-//skipdraw = true;
-//hingeSide();
 
 module hingeAssembly(){ // for visualization only
     color("yellow") t(34,0,0)  r(180,180,0) hingeSide();
@@ -123,7 +117,7 @@ module legCap(){ // attaches pipe to lower joint
     difference(){
         union(){
             b(32,8,16);
-            b(92,8,8);
+            b(WIDTH,8,8);
             t(0,6,0) r(90,0,0) c(20,25);
         }
         t(0,9,0)   r(90,0,0)   c(20,22); // pvc pipe hole
@@ -131,17 +125,17 @@ module legCap(){ // attaches pipe to lower joint
         r(0,120,0) t(0,10,10)  c(20,3);  // pipe screw hole
         r(0,60,0)  t(0,10,-10) c(20,3);  // pipe screw hole
                    r(90,0,0)   c(20,3);  // center screw hole
-        t(41,0,0)  r(90,0,0) c(20,3);    // side screw hole
-        t(-41,0,0) r(90,0,0) c(20,3);    // side screw hole
+        t(W-5,0,0)  r(90,0,0) c(20,3);    // side screw hole
+        t(-(W-5),0,0) r(90,0,0) c(20,3);    // side screw hole
     }
 }
 
 // enforces the hip frame instead of a legCap()
 module stiffBar(){
     difference(){
-        b(92,8,8);
-        t(41,0,0)  r(90,0,0) c(20,3); // side screw hole
-        t(-41,0,0) r(90,0,0) c(20,3); // side screw hole
+        b(WIDTH,8,8);
+        t(W-5,0,0)  r(90,0,0) c(20,3); // side screw hole
+        t(-(W-5),0,0) r(90,0,0) c(20,3); // side screw hole
                    r(90,0,0) c(20,3); // center screw hole
     }
 }
