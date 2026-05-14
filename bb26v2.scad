@@ -18,7 +18,7 @@ shaft_round = 8;  // 608 bearings fit an 8mm round shaft
 // if you grind the end of shaft_round into a square, it will be this size
 shaft_square = sqrt(shaft_round*shaft_round/2);
 echo("Shaft end square size", shaft_square);
-WIDTH=92;
+WIDTH=96; // old was 92
 W=WIDTH/2;
 W4=W-4;
 
@@ -47,7 +47,7 @@ module frame(){
         union(){
             difference(){ // c-frame
                 t(0,28.5,0) b(WIDTH,57,16);
-                b(76,98,17);
+                b(WIDTH-16,98,17);
             }
             flatten() t(W,0,0)  r(0,90,0) c(32,25); // bearing block
             flatten() t(-W,0,0) r(0,90,0) c(32,25); // bearing block
@@ -108,8 +108,8 @@ module hingeSide(){
 }
 
 module hingeAssembly(){ // for visualization only
-    color("yellow") t(34,0,0)  r(180,180,0) hingeSide();
-    color("yellow") t(-34,0,0) r(180,0,0)   hingeSide();
+    color("yellow") t(W-12,0,0)  r(180,180,0) hingeSide();
+    color("yellow") t(-(W-12),0,0) r(180,0,0) hingeSide();
     color("green")  t(0,-53,0)              hingeBridge();
 }
 
@@ -193,7 +193,7 @@ module foot(){ // implicit union
     }
 }
 
-module axle1(len=47){
+module axle1(len=W+1){
     b(shaft_square,shaft_square,len); // top 5mm of gear hole is square
     t(0,0,-3) c(len-6,shaft_round);   // bearings mount here
 }
