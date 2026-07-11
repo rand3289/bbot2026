@@ -18,9 +18,9 @@ shaft_round = 8;  // 608 bearings fit an 8mm round shaft
 // if you grind the end of shaft_round into a square, it will be this size
 shaft_square = sqrt(shaft_round*shaft_round/2);
 echo("Shaft end square size", shaft_square);
-WIDTH=96; // old was 92
+WIDTH=96; // Width of the frame // old one was 92
 W=WIDTH/2;
-W4=W-4;
+W4=W-4; // lots of screws are placed 4mm away from the edge of the frame
 
 module flatten(top=8){ // remove everything below top
     intersection(){
@@ -152,10 +152,34 @@ module dgear(){
         }
         t(0,0,0.33) c(9,8.3); // round shaft hole
         t(0,0,8.8) b(shaft_square,shaft_square,8); // square on top
-        for(i = [0:360/gteeth:360] ){
-            r(0,0,i) t(15,0,0) c(20,2); // mounting holes
+//        for(i = [0:360/gteeth:360] ){
+//            r(0,0,i) t(15,0,0) c(20,2); // mounting holes
+//        }
+    }
+}
+
+// gear with a floating brake center
+module gearBrake(){
+z=-4.15; // disk is below the gear
+difference(){
+    union(){
+        dgear();
+        t(0,0,z) difference() {
+            c(1.25,59); // center disk
+            for(i= [0:360/6:360] ){ // cutouts
+                r(0,0,45+i) t(0,32,0) c(2,16);
+            }
+        }
+        t(0,0,z) difference(){ // outer brake disk
+            c(1.25,95);
+            c(2, 60);
         }
     }
+    t(0,0,z) c(2,8.3); // center hole
+    for(i= [0:360/6:360] ){ // rivet holes
+        r(0,0,15+i) t(0,29.5,z) c(2.5,4);
+    }
+}
 }
 
 module gearDrillTemplate(){
@@ -229,6 +253,8 @@ if($preview){
     t(24,-195,0)  r(0,-90,0)     dgear();
     t(0,-171,0)   r(90,360/24,0) dgear(); // N teeth. rotate 1/2 tooth
     t(-24,-195,0) r(0,90,0)      dgear();
+
+    t(-130,0,0) gearBrake();
 
 %   t(0,-360,0)   r(90,0,0) c(200,21.5); // pvc pipe
 %   t(0,-98,0)    r(90,0,0) c(120,21.5); // pvc pipe
