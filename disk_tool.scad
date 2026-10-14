@@ -1,29 +1,53 @@
-// This is drawing tool for drawing circles
+// This is a drawing tool for drawing circles
 // for making disk brakes out of 0.5mm sheet metal
 //
-// 3D print the drawing tool
-// insert thumb tacs/push pins into the tool ends
+// 3D print the drawing tool using 0.3mm layers
+// insert thumb tacs/push pins into the raised tool center and end
+// my thumb tacs have 1.1mm to 1.2mm shaft diameter
 // punch a sheet of metal with a center punch
 // center one pin over the center punch mark and draw a circle with the other
+//
+// move the end tack into the closer hole
+// draw a 15mm circle for marking screw holes
+// scratch 4 marks in the slots to mark screw hole positions
+//
 // cut the disk out with metal scissors
-// drill a 10mm diameter hole in the center with a step drill
+// drill a 10mm or a 3/8" diameter hole in the center
+// center punch and drill 4 screw holes
 //
 use <bcstr.scad>
-$fn=256;
-layer = 0.3; // mm
+$fn = 256;
+l = 0.3;  // layer
+h = l*5;  // circle and bar height
+p = l*5;  // pin hole size
+w = l*12; // bar width
+d = 95/2; // disk brakes are 95mm in diameter (matches an HD platelet size)
+c = 10;   // fits into 10mm center hole in the disk (in case you drilled before marking)
+
+module tachole(){
+    difference(){
+        c(h,c);
+        c(2*h, p); // hole for a pin
+    }
+}
+
+module arm(){
+    t(9,0,0) difference(){
+        b(16, w, h);
+        t(4,0,0) b(4, p-0.3, h+1); // slots are thinner than pin holes
+    }
+}
 
 module disk_tool(){
-    h=1.5;
-    d = 95/2; // disk brakes are 95mm in diameter (matches an HD platelet size)
-    difference(){
-        c(h,8);
-        c(2*h,2.1); // hole for a pin
+    tachole();            // center
+    t(0,0,0.9) tachole(); // raised so it can be put inside a disk center hole
+    t(15,0,0)  tachole(); // for marking mounting holes
+    t(d,0,0)   tachole(); // for marking outer circumference
+    color("red")   t(8,0,0)  b(8,w,h);  // connector
+    color("green") t(32,0,0) b(26,w,h); // connector
+    for(a=[45:90:315]){
+        color("yellow") r(0,0,a) t(2,0,0) arm();
     }
-    t(d,0,0) difference(){
-        c(h,8);
-        c(2*h,2.1); // hole for a pin
-    }
-    t(d/2,0,0) b(d-4,h,h);
 }
 
 disk_tool();
