@@ -152,13 +152,13 @@ module dgear(){
         }
         t(0,0,0.33) c(9,8.3); // round shaft hole
         t(0,0,8.8) b(shaft_square,shaft_square,8); // square on top
-//        for(i = [0:360/gteeth:360] ){
-//            r(0,0,i) t(15,0,0) c(20,2); // mounting holes
-//        }
+        for(i = [0:360/4:360] ){ // 'gteeth' for mount holes in each tooth
+            r(0,0,i) t(15,0,0) c(20,2); // mounting holes
+        }
     }
 }
 
-// gear with a floating brake center
+// UNUSED EXPERIMENTAL. A gear with a floating brake center
 module gearBrake(){
 z=-4.15; // disk is below the gear
 difference(){
@@ -182,6 +182,7 @@ difference(){
 }
 }
 
+// UNUSED
 module gearDrillTemplate(){
     gteeth = 12;
     id=24.9;
@@ -254,7 +255,8 @@ if($preview){
     t(0,-171,0)   r(90,360/24,0) dgear(); // N teeth. rotate 1/2 tooth
     t(-24,-195,0) r(0,90,0)      dgear();
 
-    t(-130,0,0) gearBrake();
+%    t(-130,0,0) gearBrake(); // UNUSED
+    t(0, 120, 0) dgear();
 
 %   t(0,-360,0)   r(90,0,0) c(200,21.5); // pvc pipe
 %   t(0,-98,0)    r(90,0,0) c(120,21.5); // pvc pipe
@@ -264,7 +266,6 @@ if($preview){
 
     t(0,-480,0) r(90,0,0) foot();
 } else { // rendering for 3D printing
-    t(275,60,0) gearDrillTemplate();
     t(205,0,0) foot();
     t(290,-30,0) r(90,0,90)  stiffBar();
     t(260,-30,0) r(90,0,-90) legCap();
