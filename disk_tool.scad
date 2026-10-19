@@ -55,23 +55,35 @@ disk_tool();
 
 // this part of the tool squeezes the disk between two cones
 // so it can be spun for cleaning up the edge with a file
-layer=0.3;
-hole=4;  // cener hole in cones
-diff=8;  // difference in cone
-dh=10.5; // disk hole is 10+mm
+hole=4;    // cener hole in cones
+diff=8;    // cone diameter difference
 
 module disk_holder(){
     difference(){
-        cylinder(diff*2*layer, 3+diff/2, 3);
+        cylinder(diff*2*l, 3+diff/2, 3);
         t(0,0,-1) c(25, hole);
     }
 }
 
+// break out the center print support after printing
 module press(){
     t(0,0,1.49) disk_holder();
-    pipe(3, 14, dh);
-    pipe(3, hole+2*layer, hole); // print support
+    pipe(3, 14, c);
+    pipe(3, hole+2*l, hole); // print support
+}
+
+// after you squeeze the disk between press and disk_holder()
+// use this to protect the bolt before putting it into the drill chuck
+// print it horizontally
+module bolt_protector(){
+    difference(){
+        c(25,8); // 1" long
+        c(27,hole);
+        t(10,0,0) b(20,20,30);
+    }
 }
 
 t(0,-25,0) disk_holder();
-t(0, 23, 1.5) press();
+t(0, 25, 1.5) press();
+t(-35, 10,0) r(0,90,0) bolt_protector();
+t(-35,-10,0) r(0,90,0) bolt_protector();
