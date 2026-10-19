@@ -51,3 +51,27 @@ module disk_tool(){
 }
 
 disk_tool();
+
+
+// this part of the tool squeezes the disk between two cones
+// so it can be spun for cleaning up the edge with a file
+layer=0.3;
+hole=4;  // cener hole in cones
+diff=8;  // difference in cone
+dh=10.5; // disk hole is 10+mm
+
+module disk_holder(){
+    difference(){
+        cylinder(diff*2*layer, 3+diff/2, 3);
+        t(0,0,-1) c(25, hole);
+    }
+}
+
+module press(){
+    t(0,0,1.49) disk_holder();
+    pipe(3, 14, dh);
+    pipe(3, hole+2*layer, hole); // print support
+}
+
+t(0,-25,0) disk_holder();
+t(0, 23, 1.5) press();
