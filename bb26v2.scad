@@ -266,14 +266,14 @@ if($preview){
 
     t(0,-480,0) r(90,0,0) foot();
 } else { // rendering for 3D printing
-    t(205,0,0) foot();
+    t(275,50,0) foot();
     t(290,-30,0) r(90,0,90)  stiffBar();
     t(260,-30,0) r(90,0,-90) legCap();
     t(310,0,0) r(90,0,0) axle2(170);  // len depends on PVC pipe length
     t(230,40,0)  r(90,45,180) axle1(); // fixed length for each joint
     t(230,-40,0) r(90,45,0)   axle1(); // need 2 per joint
-    t(200,40,0)  sleve();              // need 2 per joint
-    t(200,-40,0) sleve();
+    t(205,30,0)  sleve();              // need 2 per joint
+    t(205,-30,0) sleve();
 
 
     frame();
