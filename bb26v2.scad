@@ -72,20 +72,20 @@ module frame(){
 module hingeBridge(){
     difference(){
         union(){
-            b(WIDTH,8,16); // beam
-            flatten()   t(0,9,0) r(90,0,0) c(30,25); // bearing block
-            t(0,9,-4)  b(25,30,8); // makes bearing block bottom square
-            t(0,0,10)   b(WIDTH,4,5);  // top bar for rigidity
+            t(0,0,-2) b(WIDTH,8,22);     // beam
+            t(0,9,0) r(90,0,0) c(30,25); // bearing block
+            t(0,9,-7)  b(25,30,12);      // makes bearing block bottom square
+            t(0,0,10)   b(WIDTH,4,5);    // top bar for rigidity
 
-            t(W4,4,0)   b(8,16,16); // wing 1
-            t(W4,12,0)  r(45,0,0) b(8,11.3,11.3);
+            t(W4,4,-2)   b(8,16,22);  // wing 1
+            t(W4,12,0)  r(45,0,0) b(8,12.72,12.72);
 
-            t(-W4,4,0)  b(8,16,16); // wing 2
-            t(-W4,12,0) r(45,0,0) b(8,11.3,11.3);
+            t(-W4,4,-2)  b(8,16,22); // wing 2
+            t(-W4,12,0) r(45,0,0) b(8,12.72,12.72);
         }
         t(0,7.5,0)       r(90,0,0) c(30,22); // pipe and bearing hole
         r(90,0,0)        c(100,11);          // shaft hole
-        t(0,12,13.3)     c(4,3);             // screw hole in bearing block. 13.3 for "print support"
+        t(0,11,13.3)     c(4,3);             // screw hole in bearing block. 13.3 for "print support"
         t(W-12,0,0)    b(8.1,8.1,8.1);     // cube hole for hinges
         t(-(W-12),0,0) b(8.1,8.1,8.1);     // cube hole for hinges
         r(0,90,0)     c(120,3);            // 2 screw holes
@@ -158,46 +158,6 @@ module dgear(){
     }
 }
 
-// UNUSED EXPERIMENTAL. A gear with a floating brake center
-module gearBrake(){
-z=-4.15; // disk is below the gear
-difference(){
-    union(){
-        dgear();
-        t(0,0,z) difference() {
-            c(1.25,59); // center disk
-            for(i= [0:360/6:360] ){ // cutouts
-                r(0,0,45+i) t(0,32,0) c(2,16);
-            }
-        }
-        t(0,0,z) difference(){ // outer brake disk
-            c(1.25,95);
-            c(2, 60);
-        }
-    }
-    t(0,0,z) c(2,8.3); // center hole
-    for(i= [0:360/6:360] ){ // rivet holes
-        r(0,0,15+i) t(0,29.5,z) c(2.5,4);
-    }
-}
-}
-
-// UNUSED
-module gearDrillTemplate(){
-    gteeth = 12;
-    id=24.9;
-    h=1.5; // height for HDD shaft
-    difference(){
-        union(){
-            c(10,35); // main cylinder for mounting holes
-            t(0,0,h/2) c(10+h,id); // shaft for an HDD platter
-        }
-        c(20,8); // center hole (5/16"=7.825mm)
-        for(i = [0:360/gteeth:360] ){
-            r(0,0,i) t(15,0,0) c(20,2); // mounting holes
-        }
-    }    
-}
 
 // Foot that fits into a 1/2" PVC pipe
 module foot(){ // implicit union
@@ -255,7 +215,6 @@ if($preview){
     t(0,-171,0)   r(90,360/24,0) dgear(); // N teeth. rotate 1/2 tooth
     t(-24,-195,0) r(0,90,0)      dgear();
 
-%    t(-130,0,0) gearBrake(); // UNUSED
     t(0, 120, 0) dgear();
 
 %   t(0,-360,0)   r(90,0,0) c(200,21.5); // pvc pipe
