@@ -83,7 +83,84 @@ module bolt_protector(){
     }
 }
 
-t(0,-25,0) disk_holder();
-t(0, 25, 1.5) press();
-t(-35, 10,0) r(0,90,0) bolt_protector();
-t(-35,-10,0) r(0,90,0) bolt_protector();
+t(-50,-35,0) disk_holder();
+t(-50, 35, 1.5) press();
+t(-50, 10,0) r(0,90,0) bolt_protector();
+t(-50,-10,0) r(0,90,0) bolt_protector();
+
+
+// up-down pole slider for testing a leg
+module slider(){
+tolerance = 0.4;
+d1=25.5+tolerance; // pole slider ID
+d2=d1+4;           // pole slider OD
+d3=21.5+tolerance; // PVC holder ID
+d4=d3+4;           // PVC holder OD
+l = d2/2+d4/2;     // magic
+    difference(){
+        union(){
+            t(0,0,25-d4/2) c(50,d2);
+            t(l,0,0)       r(90,0,0) c(d2,d4);
+            t(l/2,0,0)     b(l,d2,d4);
+            intersection(){ // fin
+                t(20,0,22) b(30,2,25);
+                r(90,0,0)  c(2,73);
+            }
+        }
+        c(80,d1);                           // pole hole
+        t(l,0,0)      r(90,0,0) c(d2+1,d3); // pvc hole
+        t(l,0,-10)    c(10,3);              // screw hole
+        t(l+d3/2,0,0) r(0,90,0) c(10,3);    // screw hole
+    }
+}
+
+// this part is specific to the gear motor I am using
+// it connects the motor shaft to a square shaft
+module motorCoupler(){
+    shaft_round = 8; // 608 bearings fit an 8mm round shaft
+    // if you grind an end of a round shaft into a square, it will be this size
+    sq = 0.3+sqrt(shaft_round*shaft_round/2);
+    
+    difference(){
+        c(22, 12);
+        t(0,0,8) b(sq,sq,8); // 8mm shaft
+        intersection(){      // 6mm motor shaft
+            d=6.3;
+            c(24,d);
+            t(0.5,0,0) b(d,d,24);
+            // shaft's flat side is 0.5mm in
+        }        
+    }    
+}
+
+// this part is specific to the gear motor I am using
+// it connects a motor to a 1/2" PVC pipe
+module motorMount(){
+    difference(){
+        union(){
+            c(2,37);                        // flange
+            cylinder(h=28,r1=9,r2=12.5);    // lower
+            t(0,0,42) c(28,25);             // upper (bearing+pipe)
+            r(0,0,30)  t(10,0,2) b(11,2,5); // 6 ribs
+            r(0,0,90)  t(10,0,2) b(11,2,5);
+            r(0,0,150) t(10,0,2) b(11,2,5);
+            r(0,0,210) t(10,0,2) b(11,2,5);
+            r(0,0,270) t(10,0,2) b(11,2,5);
+            r(0,0,330) t(10,0,2) b(11,2,5);
+        }
+        t(0,0,-1.1) cylinder(h=30,r1=7,r2=10); // lower hole
+        t(0,0,42) c(28.1,22.2);          // upper hole
+        t(0,0,44) r(90,0,0) c(40,3);     // holes for attaching the pvc pipe
+        t(0,0,48) r(0,90,0) c(40,3);     // holes for attaching the pvc pipe
+        r(0,0,0)   t(15.6,0,0) c(5,3.6); // 6 motor flange holes
+        r(0,0,60)  t(15.6,0,0) c(5,3.6);
+        r(0,0,120) t(15.6,0,0) c(5,3.6);
+        r(0,0,180) t(15.6,0,0) c(5,3.6);
+        r(0,0,240) t(15.6,0,0) c(5,3.6);
+        r(0,0,300) t(15.6,0,0) c(5,3.6);
+    }
+}
+
+t(0,140,0) slider();
+t(0,100,0) motorCoupler();
+t(0,60,0)  motorMount();
