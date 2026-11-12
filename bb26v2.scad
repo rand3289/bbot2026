@@ -53,11 +53,14 @@ module frame(){
             flatten() t(-W,0,0) r(0,90,0) c(32,25); // bearing block
             t(W4,30,0) r(0,0,20) b(8,45,8);        // ribs to make frame more rigid
             t(-W4,30,0) r(0,0,-20) b(8,45,8);
+            t(0,40,0) b(28,18,16); // block for mounting the brake
         }
-        t(W,0,0)      r(0,90,0) c(29,22);  // pipe and bearing hole
-        t(-W,0,0) r(0,90,0) c(29,22);  // bearing hole
-                      r(0,90,0) c(100,11); // shaft hole
-        t(0,50,0)     r(90,0,0) c(20,3);   // bracket screw hole center
+        t(W,0,0)    r(0,90,0) c(29,22);  // pipe and bearing hole
+        t(-W,0,0)   r(0,90,0) c(29,22);  // bearing hole
+                    r(0,90,0) c(100,11); // shaft hole
+        t(28,50,0)  r(90,0,0) c(20,3);   // bracket screw hole 1
+        t(-28,50,0) r(90,0,0) c(20,3);   // bracket screw hole 2
+
         t(W4,45,0)    r(90,0,0) c(30,3);  // bracket screw hole side
         t(-W4,45,0) r(90,0,0) c(30,3);  // bracket screw hole side
                      t(W-4,0,13.3)c(4,3);  // vertical screw hole in bearing block
@@ -66,6 +69,17 @@ module frame(){
         t(46,52,0)   r(0,90,0)    c(25,3); // screw holes for bolting
         t(-46,52,0)  r(0,90,0)    c(25,3); // two frames together
         t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
+
+         // brake and servo mounting holes
+        t(10,35,0)  c(20,3); // front screw holes
+        t(-10,35,0) c(20,3);
+        t(38,53,0)  c(20,3); // side screw holes
+        t(-38,53,0) c(20,3);
+        t(15,53,0)  c(20,3); // servo mount holes
+        t(-15,53,0) c(20,3);
+        t(0,51,0)   c(20,3); // gear screw hole
+        t(0,40,0) c(20,15);
+//        t(0,42,0) r(90,0,0) c(10,22);
     }
 }
 
@@ -83,14 +97,22 @@ module hingeBridge(){
             t(-W4,4,-2)  b(8,16,22); // wing 2
             t(-W4,12,0) r(45,0,0) b(8,12.72,12.72);
         }
-        t(0,7.5,0)       r(90,0,0) c(30,22); // pipe and bearing hole
-        r(90,0,0)        c(100,11);          // shaft hole
-        t(0,11,13.3)     c(4,3);             // screw hole in bearing block. 13.3 for "print support"
+        t(0,7.5,0)     r(90,0,0) c(30,22); // pipe and bearing hole
+        r(90,0,0)      c(100,11);          // shaft hole
+        t(0,11,13.3)   c(4,3);             // screw hole in bearing block. 13.3 for "print support"
         t(W-12,0,0)    b(8.1,8.1,8.1);     // cube hole for hinges
         t(-(W-12),0,0) b(8.1,8.1,8.1);     // cube hole for hinges
-        r(0,90,0)     c(120,3);            // 2 screw holes
+        r(0,90,0)     c(120,3);            // 2 screw holes on sides
         t(40,13,0)    r(0,90,0) c(50,3.6); // screw hole in wing
         t(-40,13,0)   r(0,90,0) c(50,3.6); // screw hole in wing
+
+        t(10,18,-7)  c(20,3); // front screw holes
+        t(-10,18,-7) c(20,3);
+        t(38,0,-7)   c(20,3); // side screw holes
+        t(-38,0,-7)  c(20,3);
+        t(15,0,-7)   c(20,3); // servo mount holes
+        t(-15,0,-7)  c(20,3);
+        t(0,2,-7)   c(20,3); // gear screw hole
     }
 }
 
@@ -215,8 +237,6 @@ if($preview){
     t(0,-171,0)   r(90,360/24,0) dgear(); // N teeth. rotate 1/2 tooth
     t(-24,-195,0) r(0,90,0)      dgear();
 
-    t(0, 120, 0) dgear();
-
 %   t(0,-360,0)   r(90,0,0) c(200,21.5); // pvc pipe
 %   t(0,-98,0)    r(90,0,0) c(120,21.5); // pvc pipe
 %   t(80,0,0)     r(0,90,0) c(50,21.5);  // pvc pipe
@@ -234,7 +254,6 @@ if($preview){
     t(205,30,0)  sleve();              // need 2 per joint
     t(205,-30,0) sleve();
 
-
     frame();
     t(-90,-30,0) r(0,-90,0) hingeSide();
     t(90,-30,0)  r(0,-90,0) hingeSide(); // need two per joint
@@ -242,6 +261,5 @@ if($preview){
     t(80,70,0)  dgear();
     t(0,90,0)   dgear();
     t(-80,70,0) dgear();
-
 } // if($preview)
 } // skipdraw
