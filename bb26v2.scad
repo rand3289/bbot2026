@@ -18,7 +18,7 @@ shaft_round = 8;  // 608 bearings fit an 8mm round shaft
 // if you grind the end of shaft_round into a square, it will be this size
 shaft_square = sqrt(shaft_round*shaft_round/2);
 echo("Shaft end square size", shaft_square);
-WIDTH=96; // Width of the frame // old one was 92
+WIDTH=96; // Width of the frame
 W=WIDTH/2;
 W4=W-4; // lots of screws are placed 4mm away from the edge of the frame
 
@@ -61,6 +61,7 @@ module frame(){
         t(28,50,0)  r(90,0,0) c(20,3);   // bracket screw hole 1
         t(-28,50,0) r(90,0,0) c(20,3);   // bracket screw hole 2
 
+        t(0,52,0) r(90,0,0) c(20,3);  // bracket screw hole center
         t(W4,45,0)    r(90,0,0) c(30,3);  // bracket screw hole side
         t(-W4,45,0) r(90,0,0) c(30,3);  // bracket screw hole side
                      t(W-4,0,13.3)c(4,3);  // vertical screw hole in bearing block
@@ -70,6 +71,7 @@ module frame(){
         t(-46,52,0)  r(0,90,0)    c(25,3); // two frames together
         t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
 
+//TODO: move brake 3mm back to clear the gear when leg bends 
          // brake and servo mounting holes
         t(10,35,0)  c(20,3); // front screw holes
         t(-10,35,0) c(20,3);
@@ -79,7 +81,6 @@ module frame(){
         t(-15,53,0) c(20,3);
         t(0,51,0)   c(20,3); // gear screw hole
         t(0,40,0) c(20,15);
-//        t(0,42,0) r(90,0,0) c(10,22);
     }
 }
 
@@ -136,24 +137,39 @@ module hingeAssembly(){ // for visualization only
 }
 
 module legCap(){ // attaches pipe to lower joint
-    flatten(21.5/2) // shave top off this cap level with pipe
+    flatten(8) // shave top off this cap level with pipe
     difference(){
         union(){
-            b(32,8,16);
-            b(WIDTH,8,8);
-            t(0,6,0) r(90,0,0) c(20,25);
+            b(64,8,8);
+            t(0,6,0) b(32,20,16);
+            t(0,26,0) r(90,0,0) c(20,25);
         }
-        t(0,9,0)   r(90,0,0)   c(20,22); // pvc pipe hole
-        t(0,5,0)               c(30,3);  // pipe screw hole
-        r(0,120,0) t(0,10,10)  c(20,3);  // pipe screw hole
-        r(0,60,0)  t(0,10,-10) c(20,3);  // pipe screw hole
-                   r(90,0,0)   c(20,3);  // center screw hole
-        t(W4,0,0)  r(90,0,0) c(20,3);    // side screw hole
-        t(-W4,0,0) r(90,0,0) c(20,3);    // side screw hole
+        t(0,27,0)  r(90,0,0)   c(20,22); // pvc pipe hole
+        t(0,21,11.9)           c(1.5,3); // pipe screw hole
+        r(0,110,0) t(0,30,10)  c(20,3);  // pipe screw hole
+        r(0,70,0)  t(0,30,-10) c(20,3);  // pipe screw hole
+                   r(90,0,0)   c(40,3);  // center screw hole
+        t(0,14,0)  r(90,0,0)   c(10,8);  // center screw hole access
+        t(28,0,0)  r(90,0,0)   c(20,3);  // side screw hole
+        t(-28,0,0) r(90,0,0)   c(20,3);  // side screw hole
+        t(0,27,-10) b(18,8,10); // square hole for servo support
+        t(0,6,0)   c(18,15);    // hole to make it lighter
     }
 }
 
-// enforces the hip frame instead of a legCap()
+module legCapSupported(){
+    legCap();
+    t(30,0,-6) difference(){
+        b(4,8,4);
+        b(3.4,7.4,5);
+    }
+    t(-30,0,-6) difference(){
+        b(4,8,4);
+        b(3.4,7.4,5);
+    }
+}
+
+// reenforces the hip frame similar to the legCap()
 module stiffBar(){
     difference(){
         b(WIDTH,8,8);
@@ -237,7 +253,7 @@ if($preview){
     t(0,-171,0)   r(90,360/24,0) dgear(); // N teeth. rotate 1/2 tooth
     t(-24,-195,0) r(0,90,0)      dgear();
 
-%   t(0,-360,0)   r(90,0,0) c(200,21.5); // pvc pipe
+%   t(0,-377,0)   r(90,0,0) c(200,21.5); // pvc pipe
 %   t(0,-98,0)    r(90,0,0) c(120,21.5); // pvc pipe
 %   t(80,0,0)     r(0,90,0) c(50,21.5);  // pvc pipe
 %   t(28.3,-195,0)  r(0,90,0) c(1.5,95); // brake disk
@@ -245,10 +261,10 @@ if($preview){
 
     t(0,-480,0) r(90,0,0) foot();
 } else { // rendering for 3D printing
-    t(275,50,0) foot();
+    t(260,-30,0) foot();
     t(290,-30,0) r(90,0,90)  stiffBar();
-    t(260,-30,0) r(90,0,-90) legCap();
-    t(310,0,0) r(90,0,0) axle2(170);  // len depends on PVC pipe length
+    t(275,50,0) r(0,0,0) legCapSupported();
+    t(330,0,0) r(90,0,0) axle2(170);  // len depends on PVC pipe length
     t(230,40,0)  r(90,45,180) axle1(); // fixed length for each joint
     t(230,-40,0) r(90,45,0)   axle1(); // need 2 per joint
     t(205,30,0)  sleve();              // need 2 per joint
