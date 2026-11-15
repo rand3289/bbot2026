@@ -1,4 +1,5 @@
 // BrakerBot2026 toandrey(at)yahoo.com
+// This project is released under GPL version 2 license.  See LICENSE.
 // Brakes actuated by servo motors (not shown) transfer torque from disks to limbs
 // Print everything with 0.3mm layers without support
 // Uses 1/2" pvc pipe, 608 bearings, 95mm disks from Hard Drives, MG996R servos
@@ -8,6 +9,7 @@
 // Outer diameter of the 1/2" pvc pipe is 21.5mm
 // TODO: put a screw in the shaft through the sleeve within the bearing block?
 // TODO: build a version with bushings instead of bearings?
+//TODO: move brake 3mm back to clear the gear when leg bends 
 
 use <bcstr.scad> // b(),c(),s(),t(),r()
 include <BOSL2/std.scad>
@@ -71,8 +73,7 @@ module frame(){
         t(-46,52,0)  r(0,90,0)    c(25,3); // two frames together
         t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
 
-//TODO: move brake 3mm back to clear the gear when leg bends 
-         // brake and servo mounting holes
+        // brake and servo mounting holes
         t(10,35,0)  c(20,3); // front screw holes
         t(-10,35,0) c(20,3);
         t(38,53,0)  c(20,3); // side screw holes
