@@ -72,16 +72,19 @@ module frame(){
         t(46,52,0)   r(0,90,0)    c(25,3); // screw holes for bolting
         t(-46,52,0)  r(0,90,0)    c(25,3); // two frames together
         t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
+        
+        t(0,8,0) c(18,56);
+        t(6.5,46,0) c(20,11);
+        t(-6.5,46,0) c(20,11);
 
         // brake and servo mounting holes
-        t(10,35,0)  c(20,3); // front screw holes
-        t(-10,35,0) c(20,3);
+        t(10,37,0)  c(20,3); // front screw holes
+        t(-10,37,0) c(20,3);
         t(38,53,0)  c(20,3); // side screw holes
         t(-38,53,0) c(20,3);
         t(15,53,0)  c(20,3); // servo mount holes
         t(-15,53,0) c(20,3);
-        t(0,51,0)   c(20,3); // gear screw hole
-        t(0,40,0) c(20,15);
+        t(0,53,0)   c(20,3); // gear screw hole
     }
 }
 
@@ -108,13 +111,13 @@ module hingeBridge(){
         t(40,13,0)    r(0,90,0) c(50,3.6); // screw hole in wing
         t(-40,13,0)   r(0,90,0) c(50,3.6); // screw hole in wing
 
-        t(10,18,-7)  c(20,3); // front screw holes
-        t(-10,18,-7) c(20,3);
+        t(10,16,-7)  c(20,3); // front screw holes
+        t(-10,16,-7) c(20,3);
         t(38,0,-7)   c(20,3); // side screw holes
         t(-38,0,-7)  c(20,3);
         t(15,0,-7)   c(20,3); // servo mount holes
         t(-15,0,-7)  c(20,3);
-        t(0,2,-7)   c(20,3); // gear screw hole
+        t(0,0,-7)   c(20,3); // gear screw hole
     }
 }
 
