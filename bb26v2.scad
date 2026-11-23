@@ -3,13 +3,11 @@
 // Brakes actuated by servo motors (not shown) transfer torque from disks to limbs
 // Print everything with 0.3mm layers without support
 // Uses 1/2" pvc pipe, 608 bearings, 95mm disks from Hard Drives, MG996R servos
-// Every joint uses four or five bearings (not shown), 2 disks and 3 gears
-//
+// Every joint uses 5 bearings (not shown), 2 disks and 3 gears
+// All screws are 3mm
 // Outer diameter of the 608 bearing is 22mm.  ID 8mm
 // Outer diameter of the 1/2" pvc pipe is 21.5mm
-// TODO: put a screw in the shaft through the sleeve within the bearing block?
 // TODO: build a version with bushings instead of bearings?
-//TODO: move brake 3mm back to clear the gear when leg bends 
 
 use <bcstr.scad> // b(),c(),s(),t(),r()
 include <BOSL2/std.scad>
@@ -57,25 +55,26 @@ module frame(){
             t(-W4,30,0) r(0,0,-20) b(8,45,8);
             t(0,40,0) b(28,18,16); // block for mounting the brake
         }
+        t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
         t(W,0,0)    r(0,90,0) c(29,22);  // pipe and bearing hole
         t(-W,0,0)   r(0,90,0) c(29,22);  // bearing hole
                     r(0,90,0) c(100,11); // shaft hole
+
+        t(0,8,0) c(18,56); // radius around the brake block
+        t(6.5,46,0) c(20,11); // two large holes
+        t(-6.5,46,0) c(20,11);// two large holes
+
         t(28,50,0)  r(90,0,0) c(20,3);   // bracket screw hole 1
         t(-28,50,0) r(90,0,0) c(20,3);   // bracket screw hole 2
 
-        t(0,52,0) r(90,0,0) c(20,3);  // bracket screw hole center
-        t(W4,45,0)    r(90,0,0) c(30,3);  // bracket screw hole side
+        t(0,52,0)   r(90,0,0) c(20,3);  // bracket screw hole center
+        t(W4,45,0)  r(90,0,0) c(30,3);  // bracket screw hole side
         t(-W4,45,0) r(90,0,0) c(30,3);  // bracket screw hole side
                      t(W-4,0,13.3)c(4,3);  // vertical screw hole in bearing block
         r(-70,0,0)   t(W+3,0,-10) c(20,3); // screw hole in bearing block
         r(90,0,0)    t(W+10,0,-10)c(20,3); // screw hole in bearing block
         t(46,52,0)   r(0,90,0)    c(25,3); // screw holes for bolting
         t(-46,52,0)  r(0,90,0)    c(25,3); // two frames together
-        t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
-        
-        t(0,8,0) c(18,56);
-        t(6.5,46,0) c(20,11);
-        t(-6.5,46,0) c(20,11);
 
         // brake and servo mounting holes
         t(10,37,0)  c(20,3); // front screw holes
@@ -107,9 +106,9 @@ module hingeBridge(){
         t(0,11,13.3)   c(4,3);             // screw hole in bearing block. 13.3 for "print support"
         t(W-12,0,0)    b(8.1,8.1,8.1);     // cube hole for hinges
         t(-(W-12),0,0) b(8.1,8.1,8.1);     // cube hole for hinges
+        t(40,13,0)    r(0,90,0) c(30,3.6); // screw hole in wing
+        t(-40,13,0)   r(0,90,0) c(30,3.6); // screw hole in wing
         r(0,90,0)     c(120,3);            // 2 screw holes on sides
-        t(40,13,0)    r(0,90,0) c(50,3.6); // screw hole in wing
-        t(-40,13,0)   r(0,90,0) c(50,3.6); // screw hole in wing
 
         t(10,16,-7)  c(20,3); // front screw holes
         t(-10,16,-7) c(20,3);
@@ -117,7 +116,7 @@ module hingeBridge(){
         t(-38,0,-7)  c(20,3);
         t(15,0,-7)   c(20,3); // servo mount holes
         t(-15,0,-7)  c(20,3);
-        t(0,0,-7)   c(20,3); // gear screw hole
+        t(0,0,-7)    c(20,3); // gear screw hole
     }
 }
 
@@ -149,18 +148,19 @@ module legCap(){ // attaches pipe to lower joint
             t(0,27,0) r(90,0,0) c(20,25);
             t(0,27,16) b(18,8,20); // servo support
         }
-        t(0,27,25) b(2,10,2.5); // slot on top
-        t(5,27,17) c(20,3.5);  // servo screwhole
-        t(-5,27,17) c(20,3.5); // servo screwhole
+        t(0,27,25) b(2,10,2.5); // slot on top for servo
+        t(5,27,17) c(20,3.6);   // servo screwhole
+        t(-5,27,17) c(20,3.6);  // servo screwhole
 
+        t(0,7,0)   c(18,16);    // hole to make it lighter
         t(0,28,0) r(90,0,0)  c(20,21.5); // pvc pipe hole
+
+        t(0,14,0)  r(90,0,0)   c(10,8);  // center screw hole access
+                   r(90,0,0)   c(40,3);  // center screw hole
         r(0,110,0) t(0,30,10)  c(20,3);  // pipe screw hole
         r(0,70,0)  t(0,30,-10) c(20,3);  // pipe screw hole
-                   r(90,0,0)   c(40,3);  // center screw hole
-        t(0,14,0)  r(90,0,0)   c(10,8);  // center screw hole access
         t(28,0,0)  r(90,0,0)   c(20,3);  // side screw hole
         t(-28,0,0) r(90,0,0)   c(20,3);  // side screw hole
-        t(0,7,0)   c(18,16);   // hole to make it lighter
     }
 }
 
