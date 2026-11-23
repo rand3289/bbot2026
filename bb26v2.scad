@@ -145,22 +145,22 @@ module legCap(){ // attaches pipe to lower joint
     difference(){
         union(){
             b(64,8,8);
-            t(0,6.25,0) b(28,20.5,16);
-            t(0,26.5,0) r(90,0,0) c(20,25);
+            t(0,6.5,0) b(28,21,16);
+            t(0,27,0) r(90,0,0) c(20,25);
             t(0,27,16) b(18,8,20); // servo support
         }
         t(0,27,25) b(2,10,2.5); // slot on top
         t(5,27,17) c(20,3.5);  // servo screwhole
         t(-5,27,17) c(20,3.5); // servo screwhole
 
-        t(0,27.4,0) r(90,0,0)  c(20,21.5); // pvc pipe hole
+        t(0,28,0) r(90,0,0)  c(20,21.5); // pvc pipe hole
         r(0,110,0) t(0,30,10)  c(20,3);  // pipe screw hole
         r(0,70,0)  t(0,30,-10) c(20,3);  // pipe screw hole
                    r(90,0,0)   c(40,3);  // center screw hole
         t(0,14,0)  r(90,0,0)   c(10,8);  // center screw hole access
         t(28,0,0)  r(90,0,0)   c(20,3);  // side screw hole
         t(-28,0,0) r(90,0,0)   c(20,3);  // side screw hole
-        t(0,6,0)   c(18,15);    // hole to make it lighter
+        t(0,7,0)   c(18,16);   // hole to make it lighter
     }
 }
 
