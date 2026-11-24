@@ -22,8 +22,16 @@ WIDTH=96; // Width of the frame
 W=WIDTH/2;
 W4=W-4; // lots of screws are placed 4mm away from the edge of the frame
 
-module screw(l=20){
-    c(l,3);
+// make a screw hole in the direction of X,Y,Z axis
+X=1; Y=2; Z=3; // dir
+module screw(dir, l=40){ //ex: screw(Y,20);
+    if(dir==X){
+        r(0,90,0) c(l,3);
+    }else if(dir==Y){
+        r(90,0,0) c(l,3);
+    }else if(dir==Z){
+        c(l,3);
+    }
 }
 
 module flatten(top=8){ // remove everything below top
@@ -42,7 +50,7 @@ module frame(){
             }
             flatten() t(W,0,0)  r(0,90,0) c(32,25); // bearing block
             flatten() t(-W,0,0) r(0,90,0) c(32,25); // bearing block
-            t(W4,30,0) r(0,0,20) b(8,45,8);         // ribs to make frame more rigid
+            t(W4,30,0)  r(0,0,20)  b(8,45,8);       // ribs to make frame more rigid
             t(-W4,30,0) r(0,0,-20) b(8,45,8);
         }
         t(W+1,0,0)  r(0,90,0) c(31,22);  // pipe and bearing hole
@@ -72,11 +80,7 @@ module frame2(){ // frame with a brake support
             frame();
             flatten() t(63.25,0,0) r(0,90,0) c(1.5,24); // bearing block wall
             t(0,40,0) b(28,18,16); // block for mounting the brake
-            t(0,61,0) union(){ 
-                legSocket();
-                t(31.85,0,-6) b(0.3,8,4);  // print support
-                t(-31.85,0,-6) b(0.3,8,4); // print support
-            }
+            t(0,61,0) legSocket();
         }
         t(0,8,0) c(18,56); // radius around the brake block
         t(6.5,46,0) c(20,11); // two large holes
@@ -145,15 +149,15 @@ module hingeAssembly(){ // for visualization only
 }
 
 module legSocket(){ // attaches pipe to lower joint
-    flatten(8) // shave top off this cap level with pipe
     difference(){
         union(){
-            b(64,8,8);
-            t(0,6.5,0) b(28,21,16);
-            t(0,27,0) r(90,0,0) c(20,25);
+            t(0,6.5,0) b(28,21,16); // block
+            flatten(8) t(0,27,0) r(90,0,0) c(20,25); // pipe
+            t(-24,8,0) r(0,0,45)  b(48,8,8); // bar
+            t(24,8,0)  r(0,0,-45) b(48,8,8); // bar
             t(0,27,16) b(18,8,20); // servo support
         }
-        t(0,28,0) r(90,0,0)  c(20,21.5); // pvc pipe hole
+        t(0,28,0)  r(90,0,0) c(20,21.5); // pvc pipe hole
         t(0,7,0)   c(18,16);    // hole to make it lighter
         t(0,27,25) b(2,10,2.5); // slot on top for servo
         t(5,27,17) c(20,3.6);   // servo screwhole
@@ -185,11 +189,10 @@ module dgear(){
         t(0,0,0.33) c(9,8.3); // round shaft hole
         t(0,0,8.8) b(shaft_square,shaft_square,8); // square on top
         for(i = [0:360/4:360] ){ // 'gteeth' for mount holes in each tooth
-            r(0,0,i) t(15,0,0) c(20,2); // mounting holes
+            r(0,0,i) t(15,0,0) c(20,2); // disk mounting holes
         }
     }
 }
-
 
 // Foot that fits into a 1/2" PVC pipe
 module foot(){ // implicit union
