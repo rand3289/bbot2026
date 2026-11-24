@@ -22,17 +22,6 @@ WIDTH=96; // Width of the frame
 W=WIDTH/2;
 W4=W-4; // lots of screws are placed 4mm away from the edge of the frame
 
-// make a screw hole in the direction of X,Y,Z axis
-X=1; Y=2; Z=3; // dir
-module screw(dir, l=40){ //ex: screw(Y,20);
-    if(dir==X){
-        r(0,90,0) c(l,3);
-    }else if(dir==Y){
-        r(90,0,0) c(l,3);
-    }else if(dir==Z){
-        c(l,3);
-    }
-}
 
 module flatten(top=8){ // remove everything below top
     intersection(){
