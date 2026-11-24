@@ -22,23 +22,14 @@ WIDTH=96; // Width of the frame
 W=WIDTH/2;
 W4=W-4; // lots of screws are placed 4mm away from the edge of the frame
 
+module screw(l=20){
+    c(l,3);
+}
+
 module flatten(top=8){ // remove everything below top
     intersection(){
         children();
         t(0,0,100-top) b(200,200,200); // introduces a visual glitch
-    }
-}
-
-// create holes on a side of a bearing block so it can be cut out for attaching a pipe
-module cutout(){
-    difference(){
-        c(5,22);
-        union(){
-            c(6,16);
-            r(0,0,45) b(4,30,6);
-            r(0,0,-45) b(4,30,6);
-            t(10,0,0) r(0,0,45) b(12,12,6);
-        }
     }
 }
 
@@ -51,31 +42,45 @@ module frame(){
             }
             flatten() t(W,0,0)  r(0,90,0) c(32,25); // bearing block
             flatten() t(-W,0,0) r(0,90,0) c(32,25); // bearing block
-            t(W4,30,0) r(0,0,20) b(8,45,8);        // ribs to make frame more rigid
+            t(W4,30,0) r(0,0,20) b(8,45,8);         // ribs to make frame more rigid
             t(-W4,30,0) r(0,0,-20) b(8,45,8);
-            t(0,40,0) b(28,18,16); // block for mounting the brake
         }
-        t(W+16,0,0)  r(0,90,0)   cutout(); // on side of a bearing block
-        t(W,0,0)    r(0,90,0) c(29,22);  // pipe and bearing hole
+        t(W+1,0,0)  r(0,90,0) c(31,22);  // pipe and bearing hole
         t(-W,0,0)   r(0,90,0) c(29,22);  // bearing hole
                     r(0,90,0) c(100,11); // shaft hole
+    }
+}
 
+module frame1(){ // plain frame with holes for attaching another frame or support bar
+    difference(){
+        frame();
+                    t(W-4,0,13.3) c(4,3);  // vertical screw hole in bearing block
+        r(-70,0,0)  t(W+3,0,-10)  c(20,3); // screw hole in bearing block
+        r(90,0,0)   t(W+10,0,-10) c(20,3); // screw hole in bearing block
+
+        t(46,52,0)  r(0,90,0) c(25,3); // screw holes for bolting
+        t(-46,52,0) r(0,90,0) c(25,3); // two frames together
+        t(0,52,0)   r(90,0,0) c(20,3); // bracket screw hole center
+        t(W4,45,0)  r(90,0,0) c(30,3); // bracket screw hole side
+        t(-W4,45,0) r(90,0,0) c(30,3); // bracket screw hole side
+    }
+}
+
+module frame2(){ // frame with a brake support
+    difference(){
+        union(){
+            frame();
+            flatten() t(63.25,0,0) r(0,90,0) c(1.5,24); // bearing block wall
+            t(0,40,0) b(28,18,16); // block for mounting the brake
+            t(0,61,0) union(){ 
+                legSocket();
+                t(31.85,0,-6) b(0.3,8,4);  // print support
+                t(-31.85,0,-6) b(0.3,8,4); // print support
+            }
+        }
         t(0,8,0) c(18,56); // radius around the brake block
         t(6.5,46,0) c(20,11); // two large holes
         t(-6.5,46,0) c(20,11);// two large holes
-
-        t(28,50,0)  r(90,0,0) c(20,3);   // bracket screw hole 1
-        t(-28,50,0) r(90,0,0) c(20,3);   // bracket screw hole 2
-
-        t(0,52,0)   r(90,0,0) c(20,3);  // bracket screw hole center
-        t(W4,45,0)  r(90,0,0) c(30,3);  // bracket screw hole side
-        t(-W4,45,0) r(90,0,0) c(30,3);  // bracket screw hole side
-                     t(W-4,0,13.3)c(4,3);  // vertical screw hole in bearing block
-        r(-70,0,0)   t(W+3,0,-10) c(20,3); // screw hole in bearing block
-        r(90,0,0)    t(W+10,0,-10)c(20,3); // screw hole in bearing block
-        t(46,52,0)   r(0,90,0)    c(25,3); // screw holes for bolting
-        t(-46,52,0)  r(0,90,0)    c(25,3); // two frames together
-
         // brake and servo mounting holes
         t(10,37,0)  c(20,3); // front screw holes
         t(-10,37,0) c(20,3);
@@ -139,7 +144,7 @@ module hingeAssembly(){ // for visualization only
     color("green")  t(0,-53,0)              hingeBridge();
 }
 
-module legCap(){ // attaches pipe to lower joint
+module legSocket(){ // attaches pipe to lower joint
     flatten(8) // shave top off this cap level with pipe
     difference(){
         union(){
@@ -148,31 +153,13 @@ module legCap(){ // attaches pipe to lower joint
             t(0,27,0) r(90,0,0) c(20,25);
             t(0,27,16) b(18,8,20); // servo support
         }
+        t(0,28,0) r(90,0,0)  c(20,21.5); // pvc pipe hole
+        t(0,7,0)   c(18,16);    // hole to make it lighter
         t(0,27,25) b(2,10,2.5); // slot on top for servo
         t(5,27,17) c(20,3.6);   // servo screwhole
         t(-5,27,17) c(20,3.6);  // servo screwhole
-
-        t(0,7,0)   c(18,16);    // hole to make it lighter
-        t(0,28,0) r(90,0,0)  c(20,21.5); // pvc pipe hole
-
-        t(0,14,0)  r(90,0,0)   c(10,8);  // center screw hole access
-                   r(90,0,0)   c(40,3);  // center screw hole
         r(0,110,0) t(0,30,10)  c(20,3);  // pipe screw hole
         r(0,70,0)  t(0,30,-10) c(20,3);  // pipe screw hole
-        t(28,0,0)  r(90,0,0)   c(20,3);  // side screw hole
-        t(-28,0,0) r(90,0,0)   c(20,3);  // side screw hole
-    }
-}
-
-module legCapSupported(){
-    legCap();
-    t(30,0,-6) difference(){
-        b(4,8,4);
-        b(3.4,7.4,5);
-    }
-    t(-30,0,-6) difference(){
-        b(4,8,4);
-        b(3.4,7.4,5);
     }
 }
 
@@ -245,44 +232,43 @@ if($preview){
     color("red")  t(-36.9,-195,0) r(0,90,0) axle1(); // 2 per joint
     color("teal") t(-50,-195,0) r(0,90,0) sleve();   // spacer between bearings
 
-    t(270,0,0) r(-90,90,0) frame(); // the other leg
-    t(150,0,0) r(90,90,0) frame();
+    t(270,0,0) r(-90,90,0) frame1(); // the other leg
+    t(150,0,0) r(90,90,0) frame1();
     t(150,0,0) r(90,90,0) hingeAssembly();
-    frame();
+    frame1();
     hingeAssembly();
-    t(0,-195,0) r(0,0,180) frame();
+    t(0,-195,0) r(0,0,180) frame2();
     t(0,-195,0) r(0,0,180) hingeAssembly();
 
-    t(0,-260,0)   r(180,180,0) legCap();
     t(0,70,0)     stiffBar();
+    t(0,-480,0) r(90,0,0) foot();
 
     t(24,-195,0)  r(0,-90,0)     dgear();
     t(0,-171,0)   r(90,360/24,0) dgear(); // N teeth. rotate 1/2 tooth
     t(-24,-195,0) r(0,90,0)      dgear();
 
-%   t(0,-378,0)   r(90,0,0) c(200,21.5); // pvc pipe
+%   t(0,-374,0)   r(90,0,0) c(200,21.5); // pvc pipe
 %   t(0,-98,0)    r(90,0,0) c(120,21.5); // pvc pipe
 %   t(80,0,0)     r(0,90,0) c(50,21.5);  // pvc pipe
 %   t(28.3,-195,0)  r(0,90,0) c(1.5,95); // brake disk
 %   t(-28.3,-195,0) r(0,90,0) c(1.5,95); // brake disk
-
-    t(0,-480,0) r(90,0,0) foot();
 } else { // rendering for 3D printing
-    t(260,-30,0) foot();
-    t(290,-30,0) r(90,0,90)  stiffBar();
-    t(275,50,0) r(0,0,0) legCapSupported();
-    t(330,0,0) r(90,0,0) axle2(170);  // len depends on PVC pipe length
-    t(230,40,0)  r(90,45,180) axle1(); // fixed length for each joint
-    t(230,-40,0) r(90,45,0)   axle1(); // need 2 per joint
-    t(205,30,0)  sleve();              // need 2 per joint
-    t(205,-30,0) sleve();
+    t(200,0,0)   foot();
+    t(290,0,0)   r(90,0,90)  stiffBar();
+    t(330,0,0)   r(90,0,0) axle2(170);  // len depends on PVC pipe length
+    t(250,40,0)  r(90,45,180) axle1(); // fixed length for each joint
+    t(250,-40,0) r(90,45,0)   axle1(); // need 2 per joint
+    t(205,50,0)  sleve();              // need 2 per joint
+    t(205,-50,0) sleve();
 
-    frame();
+    frame1();
     t(-90,-30,0) r(0,-90,0) hingeSide();
     t(90,-30,0)  r(0,-90,0) hingeSide(); // need two per joint
     t(0,-50,0)  hingeBridge();
     t(80,70,0)  dgear();
     t(0,90,0)   dgear();
     t(-80,70,0) dgear();
+    
+    t(-300,0,0) frame2();
 } // if($preview)
 } // skipdraw
