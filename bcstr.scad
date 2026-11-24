@@ -11,6 +11,18 @@ module rx(a=90){ rotate([a,0,0]) children(); }
 module ry(a=90){ rotate([0,a,0]) children(); }
 module rz(a=90){ rotate([0,0,a]) children(); }
 
+// cylinder in the direction of X,Y,Z axis
+X=1111; Y=1112; Z=1113; // dir
+module cyl(dir, d=3, l=40){ //ex: cyl(Y,4,20);
+    if(dir==X){
+        r(0,90,0) c(l,d);
+    }else if(dir==Y){
+        r(90,0,0) c(l,d);
+    }else if(dir==Z){
+        c(l,d);
+    }
+}
+
 
 // capped or regular pipe
 // cap parameter is the thickness of a cap
