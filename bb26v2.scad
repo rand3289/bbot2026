@@ -48,13 +48,13 @@ module frame(){
                 t(0,28.5,0) b(WIDTH,57,16);
                 b(WIDTH-16,98,17);
             }
-            flatten() t(W,0,0)  r(0,90,0) c(32,25); // bearing block
-            flatten() t(-W,0,0) r(0,90,0) c(32,25); // bearing block
+            flatten() t(W,0,0)  r(0,90,0) c(32,25.2); // bearing block
+            flatten() t(-W,0,0) r(0,90,0) c(32,25.2); // bearing block
             t(W4,30,0)  r(0,0,20)  b(8,45,8);       // ribs to make frame more rigid
             t(-W4,30,0) r(0,0,-20) b(8,45,8);
         }
-        t(W+1,0,0)  r(0,90,0) c(31,22);  // pipe and bearing hole
-        t(-W,0,0)   r(0,90,0) c(29,22);  // bearing hole
+        t(W+1,0,0)  r(0,90,0) c(31,22.2);  // pipe and bearing hole
+        t(-W,0,0)   r(0,90,0) c(29,22.2);  // bearing hole
                     r(0,90,0) c(100,11); // shaft hole
     }
 }
@@ -132,11 +132,11 @@ module hingeBridge(){
 module hingeSide(){
     difference(){
         union(){
-            r(0,90,0) c(8,34);    // pipe
+            r(0,90,0) c(8,33.6);  // pipe outer
             t(0,30,0) b(8,38,16); // side
             t(0,52,0) b(8,10,8);  // bridge connector
         }
-        r(0,90,0) c(10,26);          // hinge hole
+        r(0,90,0) c(10,25.8);        // hinge hole
         t(0,53,0) r(0,90,0) c(10,3); // screw hole
         t(0,40,0) r(0,90,0) c(10,3); // screw hole
     }
