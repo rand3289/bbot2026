@@ -13,7 +13,6 @@ use <bcstr.scad> // b(),c(),s(),t(),r()
 include <BOSL2/std.scad>
 include <BOSL2/gears.scad>
 $fn=128;          // make cylinders a bit rounder
-skipdraw = false; // disable rendering the main view for debugging
 shaft_round = 8;  // 608 bearings fit an 8mm round shaft
 // if you grind the end of shaft_round into a square, it will be this size
 shaft_square = sqrt(shaft_round*shaft_round/2);
@@ -39,12 +38,12 @@ module frame(){
             }
             flatten() t(W,0,0)  r(0,90,0) c(32,25.2); // bearing block
             flatten() t(-W,0,0) r(0,90,0) c(32,25.2); // bearing block
-            t(W4,30,0)  r(0,0,20)  b(8,45,8);       // ribs to make frame more rigid
+            t(W4,30,0)  r(0,0,20)  b(8,45,8); // ribs to make frame more rigid
             t(-W4,30,0) r(0,0,-20) b(8,45,8);
         }
-        t(W+1,0,0)  r(0,90,0) c(31,22.2);  // pipe and bearing hole
-        t(-W,0,0)   r(0,90,0) c(29,22.2);  // bearing hole
-                    r(0,90,0) c(100,11); // shaft hole
+        t(W+1,0,0)  r(0,90,0) c(31,22.2); // pipe and bearing hole
+        t(-W,0,0)   r(0,90,0) c(29,22.2); // bearing hole
+                    r(0,90,0) c(100,11);  // shaft hole
     }
 }
 
@@ -141,7 +140,7 @@ module legSocket(){ // attaches pipe to lower joint
     difference(){
         union(){
             t(0,6.5,0) b(28,21,16); // block
-            flatten(8) t(0,27,0) r(90,0,0) c(20,25); // pipe
+            flatten() t(0,27,0) r(90,0,0) c(20,25); // pipe
             t(-24,8,0) r(0,0,45)  b(48,8,8); // bar
             t(24,8,0)  r(0,0,-45) b(48,8,8); // bar
             t(0,27,16) b(18,8,20); // servo support
@@ -218,7 +217,7 @@ module sleve(len=14.1){
 }
 
 
-if(!skipdraw){ // set skipdraw=true for quick debugging of individual parts
+if(is_undef(skipdraw)){ // set skipdraw=true for quick debugging of individual parts
 if($preview){
     color("red")  t(0,-97,0)    r(90,0,0) axle2(170.1);
     color("red")  t(-36.9,-195,0) r(0,90,0) axle1(); // 2 per joint
